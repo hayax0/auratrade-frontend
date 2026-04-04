@@ -58,7 +58,8 @@ const MOEDAS_DISPONIVEIS = [
   },
 ];
 
-const API_URL = "https://auratrade-backend.onrender.com";
+// AJUSTE: URL com a barra no final para evitar erro de concatenação
+const API_URL = "https://auratrade-backend.onrender.com/";
 
 export default function App() {
   const [sinais, setSinais] = useState<Sinal[]>([]);
@@ -83,9 +84,11 @@ export default function App() {
 
   const fetchSinais = async () => {
     try {
-      const res = await fetch(`${API_URL}/sinais`);
+      // AJUSTE: Removida a barra extra aqui para usar a da constante
+      const res = await fetch(`${API_URL}sinais`);
       if (res.ok) {
-        setSinais(await res.json());
+        const data = await res.json();
+        setSinais(data);
         addLog("Database sincronizada.");
       }
     } catch (e) {
@@ -149,7 +152,8 @@ export default function App() {
     e.preventDefault();
     if (!ativoSimbolo || !precoAlvo) return;
     try {
-      const res = await fetch(`${API_URL}/sinais`, {
+      // AJUSTE: Removida a barra extra aqui
+      const res = await fetch(`${API_URL}sinais`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -171,7 +175,8 @@ export default function App() {
 
   const handleDeletar = async (id: string) => {
     try {
-      const res = await fetch(`${API_URL}/sinais/${id}`, { method: "DELETE" });
+      // AJUSTE: Removida a barra extra aqui
+      const res = await fetch(`${API_URL}sinais/${id}`, { method: "DELETE" });
       if (res.ok) {
         setSinais(sinais.filter((s) => s.id !== id));
         toast.success("ALERTA REMOVIDO");
@@ -201,7 +206,6 @@ export default function App() {
     <div className="min-h-screen bg-[#05070a] text-slate-300 font-['Inter',sans-serif] pb-20">
       <Toaster position="top-right" />
 
-      {/* Ticker Limpo e Colorido */}
       <div className="w-full bg-[#05070a] border-b border-white/5 py-6 px-8 flex flex-wrap justify-center gap-10 items-center sticky top-0 z-50 backdrop-blur-md">
         <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-widest border-r border-white/10 pr-10">
           <Globe size={16} /> LIVE MARKET
