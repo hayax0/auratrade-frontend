@@ -1,73 +1,111 @@
-# React + TypeScript + Vite
+# AuraTrade — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interface web do **AuraTrade**, uma aplicação de monitoramento de criptoativos que permite acompanhar cotações, criar alertas de compra ou venda e gerenciar os monitoramentos processados pelo backend.
 
-Currently, two official plugins are available:
+Este repositório contém o frontend da plataforma. A API responsável pela persistência, verificação dos preços e envio das notificações está disponível em [auratrade-backend](https://github.com/hayax0/auratrade-backend).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Funcionalidades
 
-## React Compiler
+- Consulta de cotações de criptoativos pela API pública da Binance.
+- Atualização automática dos preços exibidos na interface.
+- Criação de alertas de **compra** e **venda** com preço-alvo.
+- Listagem dos monitoramentos cadastrados no backend.
+- Comparação entre o preço atual e o preço definido no alerta.
+- Remoção de alertas existentes.
+- Feedback visual para operações realizadas com sucesso ou erro.
+- Registro das principais ações e falhas de comunicação no painel de logs.
+- Acesso direto ao bot do AuraTrade no Telegram.
+- Layout responsivo para desktop e dispositivos móveis.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Ativos disponíveis
 
-## Expanding the ESLint configuration
+Atualmente, a interface permite monitorar os seguintes pares:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Bitcoin — BTC/USDT
+- Ethereum — ETH/USDT
+- Solana — SOL/USDT
+- BNB — BNB/USDT
+- Cardano — ADA/USDT
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Tecnologias
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **React 19**
+- **TypeScript**
+- **Vite**
+- **Tailwind CSS 4**
+- **Lucide React**
+- **React Hot Toast**
+- **Binance Data API**
+- **API REST do AuraTrade**
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Como funciona
+
+1. O frontend consulta a Binance para apresentar as cotações atuais.
+2. O usuário seleciona o ativo, o tipo da operação e o preço-alvo.
+3. O alerta é enviado para a API REST do AuraTrade.
+4. O backend persiste e monitora o alerta.
+5. Quando a condição definida é atingida, o backend envia a notificação pelo Telegram.
+6. A interface permite acompanhar e remover os alertas cadastrados.
+
+As cotações do painel são atualizadas periodicamente sem recarregar a página. A aplicação também sincroniza os monitoramentos com o backend e informa falhas de conexão no painel de logs.
+
+## Backend e integrações
+
+O frontend se comunica com o backend hospedado no Render para:
+
+- consultar os alertas cadastrados;
+- criar novos monitoramentos;
+- remover alertas.
+
+Além disso, a aplicação consome diretamente a API pública da Binance para exibir os preços atuais dos ativos.
+
+- [Repositório do backend](https://github.com/hayax0/auratrade-backend)
+- [Bot do AuraTrade no Telegram](https://t.me/AuraTradeHaya_Bot)
+
+## Executando localmente
+
+### Pré-requisitos
+
+- Node.js 18 ou superior
+- npm
+
+### Instalação
+
+```bash
+git clone https://github.com/hayax0/auratrade-frontend.git
+cd auratrade-frontend
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Ambiente de desenvolvimento
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+A aplicação será disponibilizada no endereço informado pelo Vite, normalmente `http://localhost:5173`.
+
+### Build de produção
+
+```bash
+npm run build
+```
+
+### Verificação do código
+
+```bash
+npm run lint
+```
+
+## Estrutura da solução
+
+O AuraTrade foi separado em dois projetos:
+
+- **Frontend:** interface em React responsável pela experiência do usuário e visualização das cotações.
+- **Backend:** API em Java e Spring Boot responsável pela persistência, regras de monitoramento, integração com a Binance e notificações pelo Telegram.
+
+Essa separação permite desenvolver, testar e implantar cada camada de forma independente.
+
+## Autor
+
+Desenvolvido por [Caio Campos](https://github.com/hayax0).
